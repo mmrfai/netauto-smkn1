@@ -1,0 +1,9 @@
+#Ansible untuk otomasi jaringan
+ansible==10.7.0
+
+#untuk metode komunikasi ansible dengan perangkat jaringan
+paramiko==4.0.0
+ansible-pylibssh==1.2.2
+
+#untuk deteksi kesalahan syntax pada file yaml khususnya playbook ansible
+ansible-lint== 26.4.0
