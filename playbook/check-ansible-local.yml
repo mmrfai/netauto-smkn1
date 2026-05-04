@@ -1,8 +1,9 @@
 ---
-- hosts: localhost
+- name: Check ansible localhost
+  hosts: localhost
   gather_facts: false
   tasks:
     - name: Print ansible config location
       ansible.builtin.debug:
-        msg: 
+        msg:
           - "{{ ansible_config_file }}"
