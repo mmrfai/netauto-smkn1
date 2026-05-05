@@ -39,7 +39,6 @@
           - name: "{{ item.name }}"
             ipv4:
               - address: "{{ item.ip }}"
-            helper_addresses: "{{ [{'destination_ip': item.ip_helper}] if item.ip_helper is defined else omit }}"
         state: merged
       loop: "{{ svis }}"
 
@@ -97,9 +96,11 @@
     - name: 13. Pembuatan ACL Vlan10_in
       cisco.ios.ios_acls:
         config:
-          - name: "{{ acl.name }}"
-            acl_type: "{{ acl.acl_type }}"
-            aces: "{{ acl.aces }}"
+          - afi: ipv4
+            acls:
+              - name: "{{ acl.name }}"
+                acl_type: "{{ acl.acl_type }}"
+                aces: "{{ acl.aces }}"
         state: merged
       loop: "{{ acls }}"
       loop_control:
@@ -110,8 +111,10 @@
         config:
           - name: "{{ acl.apply_to }}"
             access_groups:
-              - acl_name: "{{ acl.name }}"
-                direction: "{{ acl.direction }}"
+              - afi: ipv4
+                acls:
+                  - name: "{{ acl.name }}"
+                    direction: "{{ acl.direction }}"
         state: merged
       loop: "{{ acls }}"
       loop_control:

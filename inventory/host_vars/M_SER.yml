@@ -49,8 +49,8 @@ acls:
   - name: "Vlan10_in"
     acl_type: "extended"
     aces:
-      - { sequence: 10, grant: "deny", source: { address: "172.16.10.0", wildcard_bits: "0.0.0.255" }, destination: { address: "192.168.30.10", wildcard_bits: "0.0.0.0" } }
-      - { sequence: 20, grant: "deny", source: { address: "172.16.10.0", wildcard_bits: "0.0.0.255" }, destination: { address: "192.168.30.5", wildcard_bits: "0.0.0.0" } }
-      - { sequence: 30, grant: "permit", source: { any: true }, destination: { any: true } }
+      - { sequence: 10, grant: "deny", protocol: "ip", source: { address: "172.16.10.0", wildcard_bits: "0.0.0.255" }, destination: { address: "192.168.30.10", wildcard_bits: "0.0.0.0" } }
+      - { sequence: 20, grant: "deny", protocol: "ip",source: { address: "172.16.10.0", wildcard_bits: "0.0.0.255" }, destination: { address: "192.168.30.5", wildcard_bits: "0.0.0.0" } }
+      - { sequence: 30, grant: "permit", protocol: "ip",source: { any: true }, destination: { any: true } }
     apply_to: "Vlan10"
     direction: "in"

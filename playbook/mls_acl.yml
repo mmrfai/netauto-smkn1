@@ -1,0 +1,34 @@
+---
+- name: Konfigurasi Multilayer Switch SMKN1 Magelang
+  hosts: mls
+  gather_facts: false
+
+  tasks:
+
+    - name: 13. Pembuatan ACL Vlan10_in
+      cisco.ios.ios_acls:
+        config:
+          - afi: ipv4
+            acls:
+              - name: "{{ acl.name }}"
+                acl_type: "{{ acl.acl_type }}"
+                aces: "{{ acl.aces }}"
+        state: merged
+      loop: "{{ acls }}"
+      loop_control:
+        loop_var: acl
+
+    - name: 14. Penerapan ACL
+      cisco.ios.ios_acl_interfaces:
+        config:
+          - name: "{{ acl.apply_to }}"
+            access_groups:
+              - afi: ipv4
+                acls:
+                  - name: "{{ acl.name }}"
+                    direction: "{{ acl.direction }}"
+        state: merged
+      loop: "{{ acls }}"
+      loop_control:
+        loop_var: acl
+      when: acl.apply_to is defined
