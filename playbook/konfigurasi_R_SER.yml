@@ -1,0 +1,15 @@
+---
+- name: Konfigurasi R-SER otomatis
+  hosts: R_SER
+  gather_facts: false
+
+  module_defaults:
+    cisco.ios.ios_config:
+      diff_against: running
+
+  tasks:
+    - name: Konfigurasi dasar
+      cisco.ios.ios_config:
+        lines:
+          - hostname R_SER
+          - ip domain-name smkn1mgl.sch.id

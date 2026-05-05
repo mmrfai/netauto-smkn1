@@ -1,0 +1,53 @@
+---
+hostname: R_EIL
+domain : smkn1mgl.sch.id
+
+interfaces:
+  - name: Ethernet0/0
+    description: R_SER
+    ip: 10.10.10.2/30
+    enabled: true
+
+  - name: Ethernet0/1
+    description: Ansible
+    ip: 192.168.194.10/24
+    enabled: true
+
+  - name: Ethernet0/2
+    description: R_BMO
+    ip: 10.10.10.9/30
+    enabled: true
+  
+  - name: Ethernet0/3
+    description: M_EIL
+    ip: 10.10.10.17/30
+    enabled: true
+
+dhcp_excluded:
+  - 172.16.20.1
+  - 172.20.20.1
+
+dhcp_pools:
+  - name: lab-EIL
+    network: 172.16.20.0 255.255.255.0
+    default_router: 172.16.20.1
+  - name: guru-EIL
+    network: 172.20.20.0 255.255.255.0
+    default_router: 172.20.20.1
+
+ospf:
+  process: 1
+  router_id: 2.2.2.2
+  networks:
+    - address: 10.10.10.0
+      wildcard_bits: 0.0.0.3
+      area: 0
+    - address: 10.10.10.8
+      wildcard_bits: 0.0.0.3
+      area: 0
+    - address: 10.10.10.16
+      wildcard_bits: 0.0.0.3
+      area: 0
+    - address: 192.168.194.0
+      wildcard_bits: 0.0.0.255
+      area: 0
