@@ -33,7 +33,7 @@
         state: merged
       loop: "{{ svis }}"
 
-    - name: 5. Konfigurasi IP SVI (Gateway VLAN) & Helper DHCP
+    - name: 5. Konfigurasi IP SVI (Gateway VLAN)
       cisco.ios.ios_l3_interfaces:
         config:
           - name: "{{ item.name }}"
@@ -41,6 +41,13 @@
               - address: "{{ item.ip }}"
         state: merged
       loop: "{{ svis }}"
+
+    - name: 6. IP Helper-address DHCP
+      cisco.ios.ios_config:
+        parents: "interface {{ item.name }}"
+        lines: "ip helper-address {{ item.ip_helper }}"
+      loop: "{{ svis }}"
+      when: item.ip_helper is defined
 
     - name: 6. Konfigurasi Mode port L3 MLS, deskripsi, dan aktifasi
       cisco.ios.ios_interfaces:
