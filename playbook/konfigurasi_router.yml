@@ -12,6 +12,7 @@
       cisco.ios.ios_hostname:
         config:
           hostname: "{{ hostname }}"
+        state: merged
 
     - name: 2. Konfigurasi domain-name dan versi ssh
       cisco.ios.ios_config:
@@ -24,7 +25,7 @@
       cisco.ios.ios_interfaces:
         config:
           - name: "{{ item.name }}"
-            description: "{{ item.description }}"
+            description: "{{ item.desc }}"
             enabled: "{{ item.enabled }}"
         state: merged
       loop: "{{ interfaces }}"
@@ -62,10 +63,6 @@
                       - forward_router_address: "{{ item.next_hop }}"
       loop: "{{ static_routes | default([]) }}"
       when: static_routes is defined
-
-    - name: Debug ospf variable
-      ansible.builtin.debug:
-        var: ospf
 
     - name: 8. OSPF Router
       cisco.ios.ios_ospfv2:

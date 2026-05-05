@@ -7,4 +7,4 @@
       cisco.ios.ios_config:
         backup: true
         backup_options:
-          dir_path: /home/mmrfai/netauto-smkn1/backup-otomatis
+          dir_path: /home/mmrfai/netauto-smkn1/backup-otomatis/{{ inventory_hostname }}/

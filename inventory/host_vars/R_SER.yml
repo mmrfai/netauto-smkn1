@@ -3,53 +3,24 @@ hostname: R_SER
 domain : smkn1mgl.sch.id
 
 interfaces:
-  - name: Ethernet0/0
-    description: R_EIL
-    ip: 10.10.10.1/30
-    enabled: true
+  - { name: "Ethernet0/0", desc: "R_EIL", ip: "10.10.10.1/30", enabled: true }
+  - { name: "Ethernet0/1", desc: "R_BMO", ip: "10.10.10.5/30", enabled: true }
+  - { name: "Ethernet0/2", desc: "ISP", ip: "188.189.190.1/24", enabled: true }
+  - {name: "Ethernet0/3", desc: "M_SER", ip: "10.10.10.13/30", enabled: true}
 
-  - name: Ethernet0/1
-    description: R_BMO
-    ip: 10.10.10.5/30
-    enabled: true
-
-  - name: Ethernet0/2
-    description: ISP
-    ip: 188.189.190.1/24
-    enabled: true
-  
-  - name: Ethernet0/3
-    description: M_SER
-    ip: 10.10.10.13/30
-    enabled: true
-
-dhcp_excluded:
-  - 172.16.10.1
-  - 172.20.10.1
+dhcp_excluded: [172.16.10.1, 172.20.10.1]
 
 dhcp_pools:
-  - name: lab
-    network: 172.16.10.0 255.255.255.0
-    default_router: 172.16.10.1
-  - name: guru
-    network: 172.20.10.0 255.255.255.0
-    default_router: 172.20.10.1
+  - { name: "lab", network: "172.16.10.0 255.255.255.0", default_router: "172.16.10.1" }
+  - { name: "guru", network: "172.20.10.0 255.255.255.0", default_router: "172.20.10.1" }
 
 static_routes:
-  - dest: 0.0.0.0/0
-    next_hop: 188.189.190.10
+  - { dest: "0.0.0.0/0", next_hop: "188.189.190.10" }
 
 ospf:
   process: 1
   router_id: 1.1.1.1
   networks:
-    - address: 10.10.10.0
-      wildcard_bits: 0.0.0.3
-      area: 0
-    - address: 10.10.10.4
-      wildcard_bits: 0.0.0.3
-      area: 0
-    - address: 10.10.10.12
-      wildcard_bits: 0.0.0.3
-      area: 0
-    
+    - { address: "10.10.10.0", wildcard_bits: "0.0.0.3", area: 0 }
+    - { address: "10.10.10.4", wildcard_bits: "0.0.0.3", area: 0 }
+    - { address: "10.10.10.12", wildcard_bits: "0.0.0.3", area: 0 }
