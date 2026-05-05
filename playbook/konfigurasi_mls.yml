@@ -1,0 +1,119 @@
+---
+- name: Konfigurasi Multilayer Switch SMKN1 Magelang
+  hosts: mls
+  gather_facts: false
+
+  tasks:
+    - name: 1. Konfigurasi hostname
+      cisco.ios.ios_hostname:
+        config:
+          hostname: "{{ hostname }}"
+        state: merged
+
+    - name: Aktifasi IP Routing
+      cisco.ios.ios_config:
+        lines:
+          - ip routing
+
+    - name: 3. Konfigurasi VLAN
+      cisco.ios.ios_vlans:
+        config:
+          - vlan_id: "{{ item.id }}"
+            name: "{{ item.name }}"
+            state: active
+        state: merged
+      loop: "{{ vlans }}"
+
+    - name: 4. Konfigurasi deskripsi SVI
+      cisco.ios.ios_interfaces:
+        config:
+          - name: "{{ item.name }}"
+            description: "{{ item.desc }}"
+            enabled: true
+        state: merged
+      loop: "{{ svis }}"
+
+    - name: 5. Konfigurasi IP SVI (Gateway VLAN) & Helper DHCP
+      cisco.ios.ios_l3_interfaces:
+        config:
+          - name: "{{ item.name }}"
+            ipv4:
+              - address: "{{ item.ip }}"
+            helper_addresses: "{{ [{'destination_ip': item.ip_helper}] if item.ip_helper is defined else omit }}"
+        state: merged
+      loop: "{{ svis }}"
+
+    - name: 6. Konfigurasi Mode port L3 MLS, deskripsi, dan aktifasi
+      cisco.ios.ios_interfaces:
+        config:
+          - name: "{{ item.name }}"
+            mode: "layer3"
+            description: "{{ item.desc }}"
+            enabled: true
+        state: merged
+      loop: "{{ routed_interfaces }}"
+
+    - name: 7. Konfigurasi IP L3 MLS
+      cisco.ios.ios_l3_interfaces:
+        config:
+          - name: "{{ item.name }}"
+            ipv4:
+              - address: "{{ item.ip }}"
+        state: merged
+      loop: "{{ routed_interfaces }}"
+
+    - name: 9. Trunk interfaces
+      cisco.ios.ios_interfaces:
+        config:
+          - name: "{{ item.name }}"
+            description: "{{ item.desc }}"
+            enabled: true
+        state: merged
+      loop: "{{ trunk_interfaces }}"
+
+    - name: 10. Set mode access pada port yg dimatikan
+      cisco.ios.ios_config:
+        parents: "interface {{ item }}"
+        lines: " switchport mode access"
+      loop: "{{ shutdown_ports }}"
+
+    - name: 11. Shutdown unused port
+      cisco.ios.ios_interfaces:
+        config:
+          - name: "{{ item }}"
+            enabled: false
+        state: merged
+      loop: "{{ shutdown_ports }}"
+
+    - name: 12. Konfigurasi OSPF
+      cisco.ios.ios_ospfv2:
+        config:
+          processes:
+            - process_id: "{{ ospf.process }}"
+              router_id: "{{ ospf.router_id }}"
+              network: "{{ ospf.networks }}"
+        state: merged
+
+    - name: 13. Pembuatan ACL Vlan10_in
+      cisco.ios.ios_acls:
+        config:
+          - name: "{{ acl.name }}"
+            acl_type: "{{ acl.acl_type }}"
+            aces: "{{ acl.aces }}"
+        state: merged
+      loop: "{{ acls }}"
+      loop_control:
+        loop_var: acl
+
+    - name: 14. Penerapan ACL
+      cisco.ios.ios_acl_interfaces:
+        config:
+          - name: "{{ acl.apply_to }}"
+            access_groups:
+              - acl_name: "{{ acl.name }}"
+                direction: "{{ acl.direction }}"
+        state: merged
+      loop: "{{ acls }}"
+      loop_control:
+        loop_var: acl
+      when: acl.apply_to is defined
