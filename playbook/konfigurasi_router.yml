@@ -8,20 +8,19 @@
       diff_against: running
 
   tasks:
-    - name: 1. Konfigurasi hostname
+    - name: 1.a. Konfigurasi hostname
       cisco.ios.ios_hostname:
         config:
           hostname: "{{ hostname }}"
         state: merged
 
-    - name: 2. Konfigurasi domain-name dan versi ssh
+    - name: 1.b. Konfigurasi domain-name
       cisco.ios.ios_config:
         lines:
           - no ip domain-lookup
           - ip domain-name {{ domain }}
-          - ip ssh version 2
 
-    - name: 3. Deskripsi dan Aktifasi Interfaces
+    - name: 2. Deskripsi dan Aktifasi Interfaces
       cisco.ios.ios_interfaces:
         config:
           - name: "{{ item.name }}"
@@ -30,7 +29,7 @@
         state: merged
       loop: "{{ interfaces }}"
 
-    - name: 4. Konfiguasi IP
+    - name: 3. Konfiguasi IP
       cisco.ios.ios_l3_interfaces:
         config:
           - name: "{{ item.name }}"
@@ -39,12 +38,12 @@
         state: merged
       loop: "{{ interfaces }}"
 
-    - name: 5. DHCP excluded address
+    - name: 4. DHCP excluded address
       cisco.ios.ios_config:
         lines: "ip dhcp excluded-address {{ item }}"
       loop: "{{ dhcp_excluded }}"
 
-    - name: 6. DHCP Pools
+    - name: 5. DHCP Pools
       cisco.ios.ios_config:
         parents: "ip dhcp pool {{ item.name }}"
         lines:
@@ -52,7 +51,7 @@
           - default-router {{ item.default_router }}
       loop: "{{ dhcp_pools }}"
 
-    - name: 7. Static routers
+    - name: 6.a. Static routers
       cisco.ios.ios_static_routes:
         config:
           - address_families:
@@ -64,10 +63,14 @@
       loop: "{{ static_routes | default([]) }}"
       when: static_routes is defined
 
-    - name: 8. OSPF Router
+    - name: 6.b. OSPF Router
       cisco.ios.ios_ospfv2:
         config:
           processes:
             - router_id: "{{ ospf.router_id }}"
               process_id: 1
               network: "{{ ospf.networks }}"
+
+#    - name: 7. Simpan running ke startup
+#      cisco.ios.ios_command:
+#        commands: "write memory"

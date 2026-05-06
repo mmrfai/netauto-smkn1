@@ -3,19 +3,24 @@
   hosts: mls
   gather_facts: false
 
+  module_defaults:
+    cisco.ios.ios_config:
+      diff_against: running
+
   tasks:
-    - name: 1. Konfigurasi hostname
+    - name: 1.a. Konfigurasi hostname
       cisco.ios.ios_hostname:
         config:
           hostname: "{{ hostname }}"
         state: merged
 
-    - name: Aktifasi IP Routing
+    - name: 1.b. Aktifasi IP Routing dan domain name
       cisco.ios.ios_config:
         lines:
           - ip routing
+          - ip domain-name "{{ item.domain }}"
 
-    - name: 3. Konfigurasi VLAN
+    - name: 2. Konfigurasi VLAN
       cisco.ios.ios_vlans:
         config:
           - vlan_id: "{{ item.id }}"
@@ -24,7 +29,7 @@
         state: merged
       loop: "{{ vlans }}"
 
-    - name: 4. Konfigurasi deskripsi SVI
+    - name: 3. Konfigurasi Deskripsi dan kondisi SVI
       cisco.ios.ios_interfaces:
         config:
           - name: "{{ item.name }}"
@@ -33,7 +38,7 @@
         state: merged
       loop: "{{ svis }}"
 
-    - name: 5. Konfigurasi IP SVI (Gateway VLAN)
+    - name: 4. Konfigurasi IP SVI (Gateway VLAN)
       cisco.ios.ios_l3_interfaces:
         config:
           - name: "{{ item.name }}"
@@ -42,7 +47,7 @@
         state: merged
       loop: "{{ svis }}"
 
-    - name: 6. IP Helper-address DHCP
+    - name: 5. IP Helper-address DHCP
       cisco.ios.ios_config:
         parents: "interface {{ item.name }}"
         lines: "ip helper-address {{ item.ip_helper }}"
@@ -68,7 +73,7 @@
         state: merged
       loop: "{{ routed_interfaces }}"
 
-    - name: 8. Description Trunk interfaces
+    - name: 8. Deskripsi interfaces trunk
       cisco.ios.ios_interfaces:
         config:
           - name: "{{ item.name }}"
@@ -83,10 +88,9 @@
         lines:
           - switchport trunk encapsulation dot1q
           - switchport mode trunk
-          - no shutdown
       loop: "{{ trunk_interfaces }}"
 
-    - name: 10. Set mode access pada port yg dimatikan
+    - name: 10. Set mode access pada unused port
       cisco.ios.ios_config:
         parents: "interface {{ item }}"
         lines: " switchport mode access"
@@ -136,3 +140,7 @@
       loop_control:
         loop_var: acl
       when: acl.apply_to is defined
+
+#    - name: 7. Simpan running ke startup
+#      cisco.ios.ios_command:
+#        commands: "write memory"
