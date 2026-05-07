@@ -12,6 +12,7 @@
       cisco.ios.ios_system:
         hostname: "{{ hostname }}"
         domain_name: "{{ domain }}"
+      tags: manual, dasar
 
     - name: 2. Deskripsi dan Aktifasi Interfaces
       cisco.ios.ios_interfaces:
@@ -21,6 +22,7 @@
             enabled: "{{ item.enabled }}"
         state: merged
       loop: "{{ interfaces }}"
+      tags: manual, deskripsi, interfaces
 
     - name: 3. Konfiguasi IP
       cisco.ios.ios_l3_interfaces:
@@ -30,11 +32,13 @@
               - address: "{{ item.ip }}"
         state: merged
       loop: "{{ interfaces }}"
+      tags: manual, ip, interfaces
 
     - name: 4. DHCP excluded address
       cisco.ios.ios_config:
         lines: "ip dhcp excluded-address {{ item }}"
       loop: "{{ dhcp_excluded }}"
+      tags: otomatis, dhcp
 
     - name: 5. DHCP Pools
       cisco.ios.ios_config:
@@ -43,6 +47,7 @@
           - network {{ item.network }}
           - default-router {{ item.default_router }}
       loop: "{{ dhcp_pools }}"
+      tags: otomatis, dhcp
 
     - name: 6.a. Static routers
       cisco.ios.ios_static_routes:
@@ -55,6 +60,7 @@
                       - forward_router_address: "{{ item.next_hop }}"
       loop: "{{ static_routes | default([]) }}"
       when: static_routes is defined
+      tags: manual, routing, static
 
     - name: 6.b. OSPF Router
       cisco.ios.ios_ospfv2:
@@ -63,6 +69,7 @@
             - router_id: "{{ ospf.router_id }}"
               process_id: 1
               network: "{{ ospf.networks }}"
+      tags: manual, routing, ospf
 
 #    - name: 7. Simpan running ke startup
 #      cisco.ios.ios_command:

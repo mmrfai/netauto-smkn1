@@ -23,6 +23,6 @@
               - afi: ipv4
                 acls:
                   - name: "{{ item.name }}"
-                    direction: "{{ item.direction }}"
+                    direction: in
         state: merged
       loop: "{{ akses }}"
