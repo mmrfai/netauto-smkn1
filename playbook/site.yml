@@ -3,7 +3,7 @@
 - name: Konfigurasi Router
   ansible.builtin.import_playbook: /home/mmrfai/netauto-smkn1/playbook/konfigurasi_router.yml
 
-- name: Konfigurasi Router
+- name: Konfigurasi MLS
   ansible.builtin.import_playbook: /home/mmrfai/netauto-smkn1/playbook/konfigurasi_mls.yml
 
 - name: Konfigurasi Switch
