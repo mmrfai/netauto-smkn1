@@ -12,6 +12,7 @@
       cisco.ios.ios_system:
         hostname: "{{ hostname }}"
         domain_name: "{{ domain }}"
+      tags: manual, dasar
 
     - name: 2. Konfigurasi VLAN
       cisco.ios.ios_vlans:
@@ -21,6 +22,7 @@
             state: active
         state: merged
       loop: "{{ vlans }}"
+      tags: otomatis, vlan
 
     - name: 3. Konfigurasi Deskripsi dan kondisi SVI
       cisco.ios.ios_interfaces:
@@ -30,6 +32,7 @@
             enabled: true
         state: merged
       loop: "{{ svis }}"
+      tags: otomatis, interfaces
 
     - name: 4. Konfigurasi IP SVI (Gateway VLAN)
       cisco.ios.ios_l3_interfaces:
@@ -39,6 +42,7 @@
               - address: "{{ item.ip }}"
         state: merged
       loop: "{{ svis }}"
+      tags: otomatis, interfaces, vlan
 
     - name: 5. IP Helper-address DHCP
       cisco.ios.ios_config:
@@ -46,6 +50,7 @@
         lines: "ip helper-address {{ item.ip_helper }}"
       loop: "{{ svis }}"
       when: item.ip_helper is defined
+      tags: otomatis, dhcp, interfaces
 
     - name: 6. Konfigurasi Mode port L3 MLS, deskripsi, dan aktifasi
       cisco.ios.ios_interfaces:
@@ -56,6 +61,7 @@
             enabled: true
         state: merged
       loop: "{{ routed_interfaces }}"
+      tags: manual, interfaces
 
     - name: 7. Konfigurasi IP L3 MLS
       cisco.ios.ios_l3_interfaces:
@@ -65,6 +71,7 @@
               - address: "{{ item.ip }}"
         state: merged
       loop: "{{ routed_interfaces }}"
+      tags: manual, interfaces
 
     - name: 8. Deskripsi interfaces trunk
       cisco.ios.ios_interfaces:
@@ -74,6 +81,7 @@
             enabled: true
         state: merged
       loop: "{{ trunk_interfaces }}"
+      tags: otomatis, vlan, interfaces, trunk
 
     - name: 9. Konfigurasi interfaces trunk
       cisco.ios.ios_config:
@@ -82,12 +90,14 @@
           - switchport trunk encapsulation dot1q
           - switchport mode trunk
       loop: "{{ trunk_interfaces }}"
+      tags: otomatis, vlan, interfaces, trunk
 
     - name: 10. Set mode access pada unused port
       cisco.ios.ios_config:
         parents: "interface {{ item }}"
         lines: " switchport mode access"
       loop: "{{ shutdown_ports }}"
+      tags: otomatis, unused, interfaces
 
     - name: 11. Shutdown unused port
       cisco.ios.ios_interfaces:
@@ -96,6 +106,7 @@
             enabled: false
         state: merged
       loop: "{{ shutdown_ports }}"
+      tags: otomatis, unused
 
     - name: 12. Konfigurasi OSPF
       cisco.ios.ios_ospfv2:
@@ -105,6 +116,7 @@
               router_id: "{{ ospf.router_id }}"
               network: "{{ ospf.networks }}"
         state: merged
+      tags: manual, otomatis, routing, ospf
 
     - name: 13. Pembuatan ACL Vlan10_in
       cisco.ios.ios_config:
@@ -115,6 +127,7 @@
           {% endfor %}
           permit ip any any
       loop: "{{ akses }}"
+      tags: otomatis, acl, keamanan
 
     - name: 14. Penerapan ACL
       cisco.ios.ios_acl_interfaces:
@@ -127,7 +140,9 @@
                     direction: "{{ item.direction }}"
         state: merged
       loop: "{{ akses }}"
+      tags: otomatis, acl, keamanan
 
 #    - name: 7. Simpan running ke startup
 #      cisco.ios.ios_command:
 #        commands: "write memory"
+#      tags: simpan

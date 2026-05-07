@@ -13,6 +13,7 @@
       cisco.ios.ios_system:
         hostname: "{{ hostname }}"
         domain_name: "{{ domain }}"
+      tags: manual, dasar
 
     - name: 2. Konfigurasi Vlan
       cisco.ios.ios_vlans:
@@ -22,6 +23,7 @@
             state: active
         state: merged
       loop: "{{ vlans }}"
+      tags: otomatis, vlan
 
     - name: 3. Deskripsi dan Aktifkan Vlan1
       cisco.ios.ios_interfaces:
@@ -30,6 +32,7 @@
             description: "Manajemen"
             enabled: true
         state: merged
+      tags: manual, interfaces, vlan
 
     - name: 4. Konfigurasi IP Manajemen
       cisco.ios.ios_l3_interfaces:
@@ -38,11 +41,13 @@
             ipv4:
               - address: "{{ vlan1_ip }}"
         state: merged
+      tags: otomatis, interfaces, vlan
 
     - name: 5. Konfigurasi default-gateway u/ Manajemen
       cisco.ios.ios_config:
         lines:
           - "ip default-gateway {{ default_gateway }}"
+      tags: manual, interaces
 
     - name: 6. Deskripsi dan enable trunk interaces
       cisco.ios.ios_interfaces:
@@ -52,6 +57,7 @@
             enabled: true
         state: merged
       loop: "{{ trunk_interfaces }}"
+      tags: otomatis, interfaces, trunk, vlan
 
     - name: 7. Konfigurasi Encapsulation Trunk dan port mode
       cisco.ios.ios_config:
@@ -60,6 +66,7 @@
           - switchport trunk encapsulation dot1q
           - switchport mode trunk
       loop: "{{ trunk_interfaces }}"
+      tags: otomatis, trunk, vlan, interfaces
 
     - name: 8. Konfigurasi access port (VLAN, deskripsi, port-security)
       cisco.ios.ios_config:
@@ -71,6 +78,7 @@
           - switchport port-security violation restrict
           - switchport port-security mac-address sticky
       loop: "{{ access_ports }}"
+      tags: otomatis, interfaces, vlan, keamanan
 
     - name: 8.b. Enable & Deskripsi Interfaces Access
       cisco.ios.ios_interfaces:
@@ -80,12 +88,14 @@
             enabled: true
         state: merged
       loop: "{{ access_ports }}"
+      tags: otomatis, interfaces, vlan
 
     - name: 9. Access Mode pada unused port
       cisco.ios.ios_config:
         parents: "interface {{ item }}"
         lines: "switchport mode access"
       loop: "{{ shutdown_ports }}"
+      tags: otomatis, unused
 
     - name: 10. Shutdown unused port
       cisco.ios.ios_interfaces:
@@ -94,3 +104,9 @@
             enabled: false
         state: merged
       loop: "{{ shutdown_ports }}"
+      tags: otomatis, unused
+
+#    - name: 11. Simpan running ke startup
+#      cisco.ios.ios_command:
+#        commands: "write memory"
+#      tags: simpan
