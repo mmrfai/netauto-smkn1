@@ -8,17 +8,10 @@
       diff_against: running
 
   tasks:
-    - name: 1.a. Konfigurasi hostname
-      cisco.ios.ios_hostname:
-        config:
-          hostname: "{{ hostname }}"
-        state: merged
-
-    - name: 1.b. Aktifasi IP Routing dan domain name
-      cisco.ios.ios_config:
-        lines:
-          - ip routing
-          - ip domain-name "{{ item.domain }}"
+    - name: 1. Konfigurasi hostname & domain
+      cisco.ios.ios_system:
+        hostname: "{{ hostname }}"
+        domain_name: "{{ domain }}"
 
     - name: 2. Konfigurasi VLAN
       cisco.ios.ios_vlans:
@@ -114,32 +107,26 @@
         state: merged
 
     - name: 13. Pembuatan ACL Vlan10_in
-      cisco.ios.ios_acls:
-        config:
-          - afi: ipv4
-            acls:
-              - name: "{{ acl.name }}"
-                acl_type: "{{ acl.acl_type }}"
-                aces: "{{ acl.aces }}"
-        state: merged
-      loop: "{{ acls }}"
-      loop_control:
-        loop_var: acl
+      cisco.ios.ios_config:
+        parents: "ip access-list {{ item.type }} {{ item.name }}"
+        lines: |
+          {% for dest in item.destination %}
+           deny    ip {{ item.source }} host {{ dest }}
+          {% endfor %}
+          permit ip any any
+      loop: "{{ akses }}"
 
     - name: 14. Penerapan ACL
       cisco.ios.ios_acl_interfaces:
         config:
-          - name: "{{ acl.apply_to }}"
+          - name: "{{ item.apply }}"
             access_groups:
               - afi: ipv4
                 acls:
-                  - name: "{{ acl.name }}"
-                    direction: "{{ acl.direction }}"
+                  - name: "{{ item.name }}"
+                    direction: "{{ item.direction }}"
         state: merged
-      loop: "{{ acls }}"
-      loop_control:
-        loop_var: acl
-      when: acl.apply_to is defined
+      loop: "{{ akses }}"
 
 #    - name: 7. Simpan running ke startup
 #      cisco.ios.ios_command:

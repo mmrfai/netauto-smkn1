@@ -8,17 +8,10 @@
       diff_against: running
 
   tasks:
-    - name: 1.a. Konfigurasi hostname
-      cisco.ios.ios_hostname:
-        config:
-          hostname: "{{ hostname }}"
-        state: merged
-
-    - name: 1.b. Konfigurasi domain-name
-      cisco.ios.ios_config:
-        lines:
-          - no ip domain-lookup
-          - ip domain-name {{ domain }}
+    - name: 1.a. Konfigurasi hostname & domain
+      cisco.ios.ios_system:
+        hostname: "{{ hostname }}"
+        domain_name: "{{ domain }}"
 
     - name: 2. Deskripsi dan Aktifasi Interfaces
       cisco.ios.ios_interfaces:
