@@ -3,18 +3,20 @@
   hosts: switches
   gather_facts: false
 
+# Module untuk --diff jika dibutuhkan
   module_defaults:
     cisco.ios.ios_config:
       diff_against: running
 
   tasks:
-
+# -----KONFIGURASI DASAR
     - name: 1. Konfigurasi hostname & domain
       cisco.ios.ios_system:
         hostname: "{{ hostname }}"
         domain_name: "{{ domain }}"
       tags: manual, dasar
 
+# -----KONFIGURASI VLAN
     - name: 2. Konfigurasi Vlan
       cisco.ios.ios_vlans:
         config:
@@ -25,6 +27,7 @@
       loop: "{{ vlans }}"
       tags: otomatis, vlan
 
+# -----KONFIGURASI INTERFACES VLAN MANAJEMEN
     - name: 3. Deskripsi dan Aktifkan Vlan1
       cisco.ios.ios_interfaces:
         config:
@@ -43,12 +46,14 @@
         state: merged
       tags: otomatis, interfaces, vlan
 
+# -----KONFIGURASI DEFAULT GATEWAY
     - name: 5. Konfigurasi default-gateway u/ Manajemen
       cisco.ios.ios_config:
         lines:
           - "ip default-gateway {{ default_gateway }}"
       tags: manual, interaces
 
+# -----KONFIGURASI TRUNK
     - name: 6. Deskripsi dan enable trunk interaces
       cisco.ios.ios_interfaces:
         config:
@@ -68,6 +73,7 @@
       loop: "{{ trunk_interfaces }}"
       tags: otomatis, trunk, vlan, interfaces
 
+# -----KONFIGURASI ACCESS PORT VLAN & PORT
     - name: 8. Konfigurasi access port (VLAN, deskripsi, port-security)
       cisco.ios.ios_config:
         parents: "interface {{ item.name }}"
@@ -90,6 +96,7 @@
       loop: "{{ access_ports }}"
       tags: otomatis, interfaces, vlan
 
+# -----KONFIGURASI UNUSED PORT
     - name: 9. Access Mode pada unused port
       cisco.ios.ios_config:
         parents: "interface {{ item }}"

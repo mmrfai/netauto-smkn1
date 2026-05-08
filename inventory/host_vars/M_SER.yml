@@ -1,26 +1,32 @@
 ---
+# Identitas Perangkat
 hostname: M_SER
 domain: smkn1mgl.sch.id
 
+# Vlan yang dibuat
 vlans:
   - { id: 10, name: "lab" }
   - { id: 20, name: "guru" }
   - { id: 30, name: "server" }
 
+# interfaces SVI untuk VLAN
 svis:
   - { name: "Vlan1", ip: "192.168.10.1/26", desc: "manajemen ansible" }
   - { name: "Vlan10", ip: "172.16.10.1/24", desc: "lab", ip_helper: "10.10.10.13" }
   - { name: "Vlan20", ip: "172.20.10.1/24", desc: "guru", ip_helper: "10.10.10.13" }
   - { name: "Vlan30", ip: "192.168.30.1/27", desc: "server" }
 
+# interface MLS --> Router
 routed_interfaces:
   - { name: "Ethernet0/0", desc: "R_SER", ip: "10.10.10.14/30", enabled: true }
 
+# Intraface trunk
 trunk_interfaces:
   - { name: "Ethernet1/0", desc: "S_SER" }
   - { name: "Ethernet1/1", desc: "S_GURU" }
   - { name: "Ethernet1/2", desc: "S_LAB" }
 
+# Interface yang tidak dipakai
 shutdown_ports: [
   "Ethernet0/1", "Ethernet0/2", "Ethernet0/3",
   "Ethernet1/3", "Ethernet2/0", "Ethernet2/1",
@@ -28,6 +34,7 @@ shutdown_ports: [
   "Ethernet3/1", "Ethernet3/2", "Ethernet3/3"
 ]
 
+# Konfigurasi OSPF
 ospf:
   process: 1
   router_id: "11.11.11.11"
@@ -38,6 +45,7 @@ ospf:
     - { address: "172.20.10.0", wildcard_bits: "0.0.0.255", area: 0}
     - { address: "192.168.30.0", wildcard_bits: "0.0.0.31", area: 0}
 
+# Konfigurasi ACL
 akses:
   - name: "Vlan10_in"
     type: "extended"

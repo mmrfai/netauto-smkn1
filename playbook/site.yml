@@ -1,7 +1,8 @@
 ---
 
+# MEMANGGIL SETIAP PLAYBOOK MENJADI SATU PLAYBOOK site.yml
 - name: Konfigurasi Router
-  ansible.builtin.import_playbook: /home/mmrfai/netauto-smkn1/playbook/konfigurasi_router.yml
+  ansible.builtin.import_playbook: /home/mmrfai/netauto-smkn1/playbook/konfigurasi_router.yml # HARUS FQDN
 
 - name: Konfigurasi MLS
   ansible.builtin.import_playbook: /home/mmrfai/netauto-smkn1/playbook/konfigurasi_mls.yml

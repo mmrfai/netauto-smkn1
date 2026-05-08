@@ -1,19 +1,22 @@
 ---
 - name: Konfigurasi Router SMKN1 MGL
   hosts: routers
-  gather_facts: false
+  gather_facts: false # tidak melakukan gather_fact
 
+# untuk melakukan --diff jika diperlukan
   module_defaults:
     cisco.ios.ios_config:
-      diff_against: running
+      diff_against: running # dibandingkan dengan running config
 
   tasks:
+# -----KONFIGURASI DASAR
     - name: 1.a. Konfigurasi hostname & domain
       cisco.ios.ios_system:
         hostname: "{{ hostname }}"
         domain_name: "{{ domain }}"
       tags: manual, dasar
 
+# -----KONFIGURASI INTERFACES
     - name: 2. Deskripsi dan Aktifasi Interfaces
       cisco.ios.ios_interfaces:
         config:
@@ -21,7 +24,7 @@
             description: "{{ item.desc }}"
             enabled: "{{ item.enabled }}"
         state: merged
-      loop: "{{ interfaces }}"
+      loop: "{{ interfaces }}"  # melakukan loop dari data variabel interfaces
       tags: manual, deskripsi, interfaces
 
     - name: 3. Konfiguasi IP
@@ -34,6 +37,7 @@
       loop: "{{ interfaces }}"
       tags: manual, ip, interfaces
 
+# -----KONFIGURASI DHCP
     - name: 4. DHCP excluded address
       cisco.ios.ios_config:
         lines: "ip dhcp excluded-address {{ item }}"
@@ -42,13 +46,14 @@
 
     - name: 5. DHCP Pools
       cisco.ios.ios_config:
-        parents: "ip dhcp pool {{ item.name }}"
+        parents: "ip dhcp pool {{ item.name }}" # setiap dhcp pools ada parents sendiri
         lines:
           - network {{ item.network }}
           - default-router {{ item.default_router }}
-      loop: "{{ dhcp_pools }}"
+      loop: "{{ dhcp_pools }}" # looping pada variabel dhcp_pools
       tags: otomatis, dhcp
 
+# -----KONFIGURASI ROUTING
     - name: 6.a. Static routers
       cisco.ios.ios_static_routes:
         config:
@@ -58,8 +63,8 @@
                   - dest: "{{ item.dest }}"
                     next_hops:
                       - forward_router_address: "{{ item.next_hop }}"
-      loop: "{{ static_routes | default([]) }}"
-      when: static_routes is defined
+      loop: "{{ static_routes | default([]) }}" # hanya melakukan konfigurasi static routing pada host_vars yang memiliki variabel static_routes
+      when: static_routes is defined # redundancy apabila | default([]) gagal
       tags: manual, routing, static
 
     - name: 6.b. OSPF Router
@@ -68,7 +73,7 @@
           processes:
             - router_id: "{{ ospf.router_id }}"
               process_id: 1
-              network: "{{ ospf.networks }}"
+              network: "{{ ospf.networks }}" # Langsung menggunakna list network pada variabel ospf
       tags: manual, routing, ospf
 
 #    - name: 7. Simpan running ke startup
