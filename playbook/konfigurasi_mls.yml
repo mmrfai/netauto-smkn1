@@ -127,17 +127,30 @@
       tags: otomatis, routing, ospf
 
 # -----KONFIGURASI ACL
-    - name: 13. Pembuatan ACL Vlan10_in
-      cisco.ios.ios_config:
-        parents: "ip access-list {{ item.type }} {{ item.name }}" # Masuk ke parent ip access-list
+#    - name: 13. Pembuatan ACL Vlan10_in
+#      cisco.ios.ios_config:
+#        parents: "ip access-list {{ item.type }} {{ item.name }}" # Masuk ke parent ip access-list
 # Looping for untuk setiap nilai destination pada variabel akses
 # Menggunakan pipeline " | " agar perintah mudah dibaca
-        lines: |
-          {% for dest in item.destination %}
-           deny    ip {{ item.source }} host {{ dest }}
-          {% endfor %}
-          permit ip any any
-      loop: "{{ akses }}" # Looping pada variabel akses
+#        lines: |
+#          {% for dest in item.destination %}
+#           deny    ip {{ item.source }} host {{ dest }}
+#          {% endfor %}
+#          permit ip any any
+#        match: exact
+#      loop: "{{ akses }}" # Looping pada variabel akses
+#      tags: otomatis, acl, keamanan
+
+    - name: 13. Pembuatan ACL VLAN10_IN
+      cisco.ios.ios_acls:
+        config:
+          - afi: ipv4
+            acls:
+              - name: "{{ item.name }}"
+                acl_type: "{{ item.type }}"
+                aces: "{{ item.aces }}"
+        state: replaced
+      loop: "{{ akses }}"
       tags: otomatis, acl, keamanan
 
     - name: 14. Penerapan ACL

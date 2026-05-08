@@ -36,9 +36,19 @@ ospf:
     - { address: "172.20.20.0", wildcard_bits: "0.0.0.255", area: 0}
 
 akses:
-  - name: "Vlan10_in"
+  - name: "VLAN10_IN"
     type: "extended"
-    source: "172.16.20.0 0.0.0.255"
-    destination: [ "192.168.30.10", "192.168.30.5"]
+    aces:
+      - { sequence: 10, grant: "deny", protocol: "ip", source: { address: "172.16.20.0", wildcard_bits: "0.0.0.255" }, destination: { host: "192.168.30.10" } }
+      - { sequence: 20, grant: "deny", protocol: "ip",source: { address: "172.16.20.0", wildcard_bits: "0.0.0.255" }, destination: { host: "192.168.30.5" } }
+      - { sequence: 30, grant: "permit", protocol: "ip",source: { any: true }, destination: { any: true } }
     apply: "Vlan10"
     direction: "in"
+
+#akses:
+#  - name: "Vlan10_in"
+#    type: "extended"
+#    source: "172.16.20.0 0.0.0.255"
+#    destination: [ "192.168.30.10", "192.168.30.5"]
+#    apply: "Vlan10"
+#    direction: "in"
