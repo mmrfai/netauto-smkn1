@@ -12,11 +12,11 @@ Tips untuk menjalankan
 ansible-playbook playbook/site.yml
 
 2. Menjalankan playbook untuk pengujian skalabilitas
-2.a. 5 buah
+- 5 buah
 ansible-playbook playbook/site.yml --limit BLOK_EIL
-2.b. 10 Buah
+- 10 Buah
 ansible-playbook playbook/site.yml --limit "BLOK_EIL, BLOK_SER"
-2.c. 15 Buah
+- 15 Buah
 pakai cara normal
 
 3. Menjalankan playbook untuk pengujian keandalan sistem
