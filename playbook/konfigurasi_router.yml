@@ -14,7 +14,7 @@
       cisco.ios.ios_system:
         hostname: "{{ hostname }}"
         domain_name: "{{ domain }}"
-      tags: manual, dasar
+      tags: otomatis, dasar
 
 # -----KONFIGURASI INTERFACES
     - name: 2. Deskripsi dan Aktifasi Interfaces

@@ -38,7 +38,7 @@ ospf:
 akses:
   - name: "Vlan10_in"
     type: "extended"
-    source: "172.16.10.0 0.0.0.255"
+    source: "172.16.30.0 0.0.0.255"
     destination: [ "192.168.30.10", "192.168.30.5"]
     apply: "Vlan10"
     direction: "in"

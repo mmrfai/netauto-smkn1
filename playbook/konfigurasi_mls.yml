@@ -14,7 +14,7 @@
       cisco.ios.ios_system:
         hostname: "{{ hostname }}"
         domain_name: "{{ domain }}"
-      tags: manual, dasar
+      tags: otomatis, dasar
 
 # -----PEMBUATAN VLAN
     - name: 2. Konfigurasi VLAN
@@ -124,7 +124,7 @@
               router_id: "{{ ospf.router_id }}"
               network: "{{ ospf.networks }}"
         state: merged
-      tags: manual, otomatis, routing, ospf
+      tags: otomatis, routing, ospf
 
 # -----KONFIGURASI ACL
     - name: 13. Pembuatan ACL Vlan10_in
