@@ -1,0 +1,13 @@
+---
+- name: Verifikasi VLAN
+  hosts: mls, switches
+  gather_facts: false
+  tasks:
+    - name: Mengambil output VLAN brief
+      cisco.ios.ios_command:
+        commands: "show vlan brief"
+      register: vlan_out
+
+    - name: Menampilkan VLAN
+      ansible.builtin.debug:
+        var: vlan_out.stdout_lines

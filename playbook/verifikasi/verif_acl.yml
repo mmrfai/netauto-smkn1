@@ -1,0 +1,13 @@
+---
+- name: Verifikasi ACL
+  hosts: mls
+  gather_facts: false
+  tasks:
+    - name: Ambil Info ACL di VLAN10
+      cisco.ios.ios_command:
+        commands: "show running | section Vlan10"
+      register: acl_out
+
+    - name: Menampilkan aturan ACL
+      ansible.builtin.debug:
+        var: acl_out.stdout_lines

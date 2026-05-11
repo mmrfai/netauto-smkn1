@@ -1,0 +1,13 @@
+---
+- name: Verifikasi DHCP
+  hosts: routers
+  gather_facts: false
+  tasks:
+    - name: Ambil output DHCP
+      cisco.ios.ios_command:
+        commands: "show ip dhcp binding"
+      register: dhcp_out
+
+    - name: Menampilkan DHCP
+      ansible.builtin.debug:
+        var: dhcp_out.stdout_lines

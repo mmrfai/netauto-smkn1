@@ -1,0 +1,13 @@
+---
+- name: Verifikasi OSPF
+  hosts: routers, mls
+  gather_facts: false
+  tasks:
+    - name: OSPF NEIGHBOR
+      cisco.ios.ios_command:
+        commands: "show ip ospf neighbor"
+      register: ospf_out
+
+    - name: Menampilkan OSPF
+      ansible.builtin.debug:
+        var: ospf_out.stdout_lines

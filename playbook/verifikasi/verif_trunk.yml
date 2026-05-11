@@ -1,0 +1,13 @@
+---
+- name: Verifikasi Trunk
+  hosts: mls, switches
+  gather_facts: false
+  tasks:
+    - name: Mengambil output trunk interfaces
+      cisco.ios.ios_command:
+        commands: "show interfaces trunk"
+      register: trunk_out
+
+    - name: Menampilkan Trunk
+      ansible.builtin.debug:
+        var: trunk_out.stdout_lines

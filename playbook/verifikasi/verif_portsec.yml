@@ -1,0 +1,13 @@
+---
+- name: Verifikasi port-security
+  hosts: switches
+  gather_facts: false
+  tasks:
+    - name: Ambil status port-security
+      cisco.ios.ios_command:
+        commands: "show port-security"
+      register: ps_out
+
+    - name: Menampilkan port-security
+      ansible.builtin.debug:
+        var: ps_out.stdout_lines
