@@ -8,7 +8,7 @@ service timestamps log datetime msec
 no service password-encryption
 service compress-config
 !
-hostname S-OT
+hostname S_AG
 !
 boot-start-marker
 boot-end-marker
@@ -100,10 +100,10 @@ interface Ethernet3/3
  duplex auto
 !
 interface Vlan1
- ip address 192.168.10.133 255.255.255.192
+ ip address 192.168.10.201 255.255.255.192
  no ip route-cache
 !
-ip default-gateway 192.168.10.129
+ip default-gateway 192.168.10.193
 !
 no ip http server
 !

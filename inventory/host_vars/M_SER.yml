@@ -47,7 +47,7 @@ ospf:
 
 # Konfigurasi ACL
 akses:
-  - name: "VLAN10_IN"
+  - name: "Vlan10_in"
     type: "extended"
     aces:
       - { sequence: 10, grant: "deny", protocol: "ip", source: { address: "172.16.10.0", wildcard_bits: "0.0.0.255" }, destination: { host: "192.168.30.10" } }

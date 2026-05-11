@@ -1,6 +1,6 @@
 Building configuration...
 
-Current configuration : 1875 bytes
+Current configuration : 1727 bytes
 !
 version 15.1
 service timestamps debug datetime msec
@@ -8,7 +8,7 @@ service timestamps log datetime msec
 no service password-encryption
 service compress-config
 !
-hostname M-SER
+hostname S-PT
 !
 boot-start-marker
 boot-end-marker
@@ -22,11 +22,12 @@ username admin privilege 15 secret 4 X4ZqtPJ///KxuEWxHSsJrv3beQVnz2ise/xj8fF6eFU
 no aaa new-model
 no ipv6 cef
 ipv6 multicast rpf use-bgp
+no ip routing
 no ip icmp rate-limit unreachable
 !
 no ip domain-lookup
 ip domain-name smkn1mgl.sch.id
-ip cef
+no ip cef
 !
 !
 !
@@ -51,9 +52,7 @@ ip ssh version 2
 !
 !
 interface Ethernet0/0
- description ke R-SER
- no switchport
- ip address 10.10.10.14 255.255.255.252
+ duplex auto
 !
 interface Ethernet0/1
  duplex auto
@@ -101,14 +100,10 @@ interface Ethernet3/3
  duplex auto
 !
 interface Vlan1
- description management ansible ke switch
- ip address 192.168.10.1 255.255.255.192
+ ip address 192.168.10.203 255.255.255.192
+ no ip route-cache
 !
-router ospf 1
- router-id 11.11.11.11
- network 10.10.10.12 0.0.0.3 area 0
- network 192.168.10.0 0.0.0.63 area 0
-!
+ip default-gateway 192.168.10.193
 !
 no ip http server
 !

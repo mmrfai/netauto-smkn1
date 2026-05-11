@@ -1,6 +1,6 @@
 Building configuration...
 
-Current configuration : 1725 bytes
+Current configuration : 1727 bytes
 !
 version 15.1
 service timestamps debug datetime msec
@@ -8,7 +8,7 @@ service timestamps log datetime msec
 no service password-encryption
 service compress-config
 !
-hostname S-SER
+hostname S-PL
 !
 boot-start-marker
 boot-end-marker
@@ -100,10 +100,10 @@ interface Ethernet3/3
  duplex auto
 !
 interface Vlan1
- ip address 192.168.10.10 255.255.255.192
+ ip address 192.168.10.202 255.255.255.192
  no ip route-cache
 !
-ip default-gateway 192.168.10.1
+ip default-gateway 192.168.10.193
 !
 no ip http server
 !

@@ -1,11 +1,11 @@
 ---
-hostname: R_EIL
+hostname: R_EIL_MOD
 domain : smkn1mgl.sch.id
 
 interfaces:
   - { name: "Ethernet0/0", desc: "R_SER", ip: "10.10.10.2/30", enabled: true }
   - { name: "Ethernet0/1", desc: "Ansible", ip: "192.168.194.10/24", enabled: true }  
-  - { name: "Ethernet0/2", desc: "R_BMO", ip: "10.10.10.9/30", enabled: true } # OPSI UTAMA : diganti di modularitas R_ALT 10.10.10.25
+  - { name: "Ethernet0/2", desc: "R_BMO", ip: "10.10.10.25/30", enabled: true } # OPSI UTAMA : diganti di modularitas R_ALT 10.10.10.25
   - { name: "Ethernet0/3", desc: "M_EIL", ip: "10.10.10.17/30", enabled: true }
 # Opsi lain modularitas :
 #  - { name: "Ethernet1/0", desc: "R_ALT", ip: "10.10.10.25/30", enabled: true }
@@ -21,8 +21,11 @@ ospf:
   router_id: 2.2.2.2
   networks:
     - { address: "10.10.10.0", wildcard_bits: "0.0.0.3", area: 0 }
-    - { address: "10.10.10.8", wildcard_bits: "0.0.0.3", area: 0 }
-    - { address: "10.10.10.16", wildcard_bits: "0.0.0.3", area: 0 } # OPSI UTAMA : modularitas jadi 10.10.10.24
+    - { address: "10.10.10.24", wildcard_bits: "0.0.0.3", area: 0 } # OPSI UTAMA : modularitas jadi 10.10.10.24
+    - { address: "10.10.10.16", wildcard_bits: "0.0.0.3", area: 0 } 
     - { address: "192.168.194.0", wildcard_bits: "0.0.0.255", area: 0 }
-# OPSI LAIN:
-#    - { address: "10.10.10.24", wildcard_bits: "0.0.0.3", area: 0 }
+# OPSI tambah kabel
+#  - { address: "10.10.10.24", wildcard_bits: "0.0.0.3", area: 0 }
+
+# JIKA OPSI UTAMA, dan dihitung prekonfigurasi
+# MERUBAH : 2, seharusnya tidak karena sudah masuk prekonfigurasi

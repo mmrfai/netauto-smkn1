@@ -1,6 +1,6 @@
 Building configuration...
 
-Current configuration : 1725 bytes
+Current configuration : 1866 bytes
 !
 version 15.1
 service timestamps debug datetime msec
@@ -8,7 +8,7 @@ service timestamps log datetime msec
 no service password-encryption
 service compress-config
 !
-hostname S-LAB
+hostname M_ALT
 !
 boot-start-marker
 boot-end-marker
@@ -22,12 +22,11 @@ username admin privilege 15 secret 4 X4ZqtPJ///KxuEWxHSsJrv3beQVnz2ise/xj8fF6eFU
 no aaa new-model
 no ipv6 cef
 ipv6 multicast rpf use-bgp
-no ip routing
 no ip icmp rate-limit unreachable
 !
 no ip domain-lookup
 ip domain-name smkn1mgl.sch.id
-no ip cef
+ip cef
 !
 !
 !
@@ -52,7 +51,9 @@ ip ssh version 2
 !
 !
 interface Ethernet0/0
- duplex auto
+ description R_ALT
+ no switchport
+ ip address 10.10.10.34 255.255.255.252
 !
 interface Ethernet0/1
  duplex auto
@@ -100,10 +101,14 @@ interface Ethernet3/3
  duplex auto
 !
 interface Vlan1
- ip address 192.168.10.12 255.255.255.192
- no ip route-cache
+ description management ansible
+ ip address 192.168.10.193 255.255.255.192
 !
-ip default-gateway 192.168.10.1
+router ospf 1
+ router-id 44.44.44.44
+ network 10.10.10.32 0.0.0.3 area 0
+ network 192.168.10.192 0.0.0.63 area 0
+!
 !
 no ip http server
 !

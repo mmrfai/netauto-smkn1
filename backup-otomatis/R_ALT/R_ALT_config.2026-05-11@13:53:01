@@ -1,16 +1,14 @@
 Building configuration...
 
   
-Current configuration : 2522 bytes
-!
-! Last configuration change at 11:34:12 UTC Fri May 8 2026 by admin
+Current configuration : 2416 bytes
 !
 version 15.7
 service timestamps debug datetime msec
 service timestamps log datetime msec
 no service password-encryption
 !
-hostname R-EIL
+hostname R-ALT
 !
 boot-start-marker
 boot-end-marker
@@ -44,8 +42,8 @@ no ip icmp rate-limit unreachable
 
 
 !
-ip dhcp excluded-address 172.16.20.1
-ip dhcp excluded-address 172.20.20.1
+!
+ip dhcp pool lab-ALT
 !
 !
 !
@@ -64,7 +62,7 @@ multilink bundle-name authenticated
 !
 !
 !
-username admin privilege 15 secret 5 $1$Bu8w$N6CBoWY82c1096bkI1wnP.
+username admin privilege 15 secret 5 $1$JWbu$6yeeCoNKik9idsgw7sEVs/
 !
 redundancy
 !
@@ -84,23 +82,23 @@ ip tcp synwait-time 5
 !
 !
 interface Ethernet0/0
- description ke R-SER
- ip address 10.10.10.2 255.255.255.252
+ description R_BMO
+ ip address 10.10.10.30 255.255.255.252
  duplex auto
 !
 interface Ethernet0/1
- description Konek Ansible .1
- ip address 192.168.194.10 255.255.255.0
+ no ip address
+ shutdown
  duplex auto
 !
 interface Ethernet0/2
- description ke R-BMO
- ip address 10.10.10.9 255.255.255.252
+ description R_EIL
+ ip address 10.10.10.26 255.255.255.252
  duplex auto
 !
 interface Ethernet0/3
- description ke M-EIL
- ip address 10.10.10.17 255.255.255.252
+ description M_ALT
+ ip address 10.10.10.33 255.255.255.252
  duplex auto
 !
 interface Ethernet1/0
@@ -164,11 +162,13 @@ interface Serial3/3
  serial restart-delay 0
 !
 router ospf 1
- router-id 2.2.2.2
- network 10.10.10.0 0.0.0.3 area 0
+ router-id 4.4.4.4
+ network 10.10.10.4 0.0.0.3 area 0
  network 10.10.10.8 0.0.0.3 area 0
- network 10.10.10.16 0.0.0.3 area 0
- network 192.168.194.0 0.0.0.255 area 0
+ network 10.10.10.20 0.0.0.3 area 0
+ network 10.10.10.24 0.0.0.3 area 0
+ network 10.10.10.28 0.0.0.3 area 0
+ network 10.10.10.32 0.0.0.3 area 0
 !
 ip forward-protocol nd
 !
