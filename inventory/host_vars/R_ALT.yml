@@ -1,6 +1,6 @@
 ---
 hostname: R_ALT
-domain : smkn1mgl.sch.id
+domain: smkn1mgl.sch.id
 
 interfaces:
   - { name: "Ethernet0/0", desc: "R_BMO", ip: "10.10.10.30/30", enabled: true }
@@ -19,8 +19,8 @@ ospf:
   networks:
     - { address: "10.10.10.24", wildcard_bits: "0.0.0.3", area: 0 }
     - { address: "10.10.10.28", wildcard_bits: "0.0.0.3", area: 0 }
-    - { address: "10.10.10.32", wildcard_bits: "0.0.0.3", area: 0 } 
+    - { address: "10.10.10.32", wildcard_bits: "0.0.0.3", area: 0 }
 
 # Perubahan, tidak termasuk enter (x) termasuk enter [x]
 # include prekonfigurasi : (18) [22]
-# otomatisasi saja : (4) [5] 
+# otomatisasi saja : (4) [5]
