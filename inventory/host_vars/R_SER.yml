@@ -1,7 +1,7 @@
 ---
 # Identitas perangkat
 hostname: R_SER
-domain : smkn1mgl.sch.id
+domain: smkn1mgl.sch.id
 
 # Interfaces layer 3
 interfaces:

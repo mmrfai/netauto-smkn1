@@ -16,7 +16,7 @@ access_ports:
   - { name: "Ethernet2/1", vlan: 10, desc: "lab" }
   - { name: "Ethernet2/2", vlan: 10, desc: "lab" }
   - { name: "Ethernet2/3", vlan: 10, desc: "lab" }
-  
+
 
 shutdown_ports: [
   "Ethernet0/1", "Ethernet0/2", "Ethernet0/3",
