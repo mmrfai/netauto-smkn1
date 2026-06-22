@@ -28,4 +28,4 @@ vlan1_ip: "192.168.10.203/26"
 
 # Perubahan, tidak termasuk enter (x) termasuk enter [x]
 # include prekonfigurasi : (22) [27]
-# otomatisasi saja : (18) [21] 
+# otomatisasi saja : (18) [21]

@@ -1,0 +1,13 @@
+---
+- name: Verifikasi VLAN
+  hosts: mls, switches, routers
+  gather_facts: false
+  tasks:
+    - name: Mengambil interface brief
+      cisco.ios.ios_command:
+        commands: "show ip interface brief"
+      register: interface_out
+
+    - name: Menampilkan interfaces
+      ansible.builtin.debug:
+        var: interface_out.stdout_lines

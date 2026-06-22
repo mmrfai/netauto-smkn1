@@ -73,7 +73,7 @@
       loop: "{{ trunk_interfaces }}"
       tags: otomatis, trunk, vlan, interfaces
 
-# -----KONFIGURASI ACCESS PORT VLAN & PORT
+# -----KONFIGURASI ACCESS PORT VLAN & PORT SECURITY
     - name: 8. Konfigurasi access port (VLAN, deskripsi, port-security)
       cisco.ios.ios_config:
         parents: "interface {{ item.name }}"

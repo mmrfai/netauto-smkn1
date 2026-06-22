@@ -1,13 +1,11 @@
 ---
 hostname: R_BMO_MOD
-domain : smkn1mgl.sch.id
+domain: smkn1mgl.sch.id
 
 interfaces:
   - { name: "Ethernet0/1", desc: "R_SER", ip: "10.10.10.6/30", enabled: true }
   - { name: "Ethernet0/0", desc: "R_ALT", ip: "10.10.10.29/30", enabled: true } # opsi utama modularitas dignati E0/0, R_ALT, 10.10.10.29
   - { name: "Ethernet0/3", desc: "M_BMO", ip: "10.10.10.21/30", enabled: true }
-# Opsi Modularitas lain
-# - { name: "Ethernet0/0", desc: "R_ALT", ip: "10.10.10.29/30", enabled: true }
 
 dhcp_excluded: [172.16.30.1, 172.20.30.1]
 
@@ -21,10 +19,7 @@ ospf:
   networks:
     - { address: "10.10.10.4", wildcard_bits: "0.0.0.3", area: 0 }
     - { address: "10.10.10.28", wildcard_bits: "0.0.0.3", area: 0 } # opsi utama modularitas diganti 10.10.10.28
-    - { address: "10.10.10.20", wildcard_bits: "0.0.0.3", area: 0 } 
-# opsi modularitas tambah kabel
-#    - { address: "10.10.10.28", wildcard_bits: "0.0.0.3", area: 0 }
-#    - { address: "10.10.10.8", wildcard_bits: "0.0.0.3", area: 0 }
+    - { address: "10.10.10.20", wildcard_bits: "0.0.0.3", area: 0 }
 
 # JIKA OPSI UTAMA, dan dihitung prekonfigurasi
 # MERUBAH : 2, seharusnya tidak karena sudah masuk prekonfigurasi
