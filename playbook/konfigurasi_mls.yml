@@ -25,7 +25,7 @@
             state: active
         state: merged
       loop: "{{ vlans }}" # looping variabel vlans
-      tags: otomatis, vlan
+      tags: otomatis, vlan, access
 
 # -----KONFIGURASI SVI untuk VLAN
     - name: 3. Konfigurasi Deskripsi dan kondisi SVI
@@ -36,7 +36,7 @@
             enabled: true
         state: merged
       loop: "{{ svis }}" # looping variabel svis
-      tags: otomatis, interfaces
+      tags: otomatis, interfaces, svi
 
     - name: 4. Konfigurasi IP SVI (Gateway VLAN)
       cisco.ios.ios_l3_interfaces:
@@ -46,7 +46,7 @@
               - address: "{{ item.ip }}"
         state: merged
       loop: "{{ svis }}"
-      tags: otomatis, interfaces, vlan
+      tags: otomatis, interfaces, svi
 
     - name: 5. IP Helper-address DHCP
       cisco.ios.ios_config:
@@ -148,7 +148,7 @@
                 acls:
                   - name: "{{ item.name }}"
                     direction: "{{ item.direction }}"
-        state: merged
+        state: replaced
       loop: "{{ akses }}"
       tags: otomatis, acl, keamanan
 

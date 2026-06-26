@@ -25,7 +25,7 @@
             state: active
         state: merged
       loop: "{{ vlans }}"
-      tags: otomatis, vlan
+      tags: otomatis, vlan, vlan2
 
 # -----KONFIGURASI INTERFACES VLAN MANAJEMEN
     - name: 3. Deskripsi dan Aktifkan Vlan1

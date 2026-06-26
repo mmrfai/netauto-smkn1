@@ -11,3 +11,12 @@
     - name: Menampilkan DHCP
       ansible.builtin.debug:
         var: dhcp_out.stdout_lines
+
+    - name: Running config
+      cisco.ios.ios_command:
+        commands: "show running | section dhcp"
+      register: run_out
+
+    - name: Show running
+      ansible.builtin.debug:
+        var: run_out

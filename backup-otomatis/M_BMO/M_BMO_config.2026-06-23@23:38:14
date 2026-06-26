@@ -1,0 +1,186 @@
+Building configuration...
+
+Current configuration : 2985 bytes
+!
+version 15.1
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+service compress-config
+!
+hostname M_BMO
+!
+boot-start-marker
+boot-end-marker
+!
+!
+logging discriminator EXCESS severity drops 6 msg-body drops EXCESSCOLL 
+logging buffered 50000
+logging console discriminator EXCESS
+!
+username admin privilege 15 secret 4 X4ZqtPJ///KxuEWxHSsJrv3beQVnz2ise/xj8fF6eFU
+no aaa new-model
+no ipv6 cef
+ipv6 multicast rpf use-bgp
+no ip icmp rate-limit unreachable
+!
+no ip domain-lookup
+ip domain-name smkn1mgl.sch.id
+ip cef
+!
+!
+!
+!
+spanning-tree mode pvst
+spanning-tree extend system-id
+!
+!
+!
+!
+vlan internal allocation policy ascending
+!
+ip tcp synwait-time 5
+ip ssh version 2
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+interface Ethernet0/0
+ description R_BMO
+ no switchport
+ ip address 10.10.10.22 255.255.255.252
+!
+interface Ethernet0/1
+ switchport mode access
+ shutdown
+ duplex auto
+!
+interface Ethernet0/2
+ switchport mode access
+ shutdown
+ duplex auto
+!
+interface Ethernet0/3
+ switchport mode access
+ shutdown
+ duplex auto
+!
+interface Ethernet1/0
+ description S_BA
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ duplex auto
+!
+interface Ethernet1/1
+ description S_ME
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ duplex auto
+!
+interface Ethernet1/2
+ description S_OT
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ duplex auto
+!
+interface Ethernet1/3
+ switchport mode access
+ shutdown
+ duplex auto
+!
+interface Ethernet2/0
+ switchport mode access
+ shutdown
+ duplex auto
+!
+interface Ethernet2/1
+ switchport mode access
+ shutdown
+ duplex auto
+!
+interface Ethernet2/2
+ switchport mode access
+ shutdown
+ duplex auto
+!
+interface Ethernet2/3
+ switchport mode access
+ shutdown
+ duplex auto
+!
+interface Ethernet3/0
+ switchport mode access
+ shutdown
+ duplex auto
+!
+interface Ethernet3/1
+ switchport mode access
+ shutdown
+ duplex auto
+!
+interface Ethernet3/2
+ switchport mode access
+ shutdown
+ duplex auto
+!
+interface Ethernet3/3
+ switchport mode access
+ shutdown
+ duplex auto
+!
+interface Vlan1
+ description manajemen ansible
+ ip address 192.168.10.129 255.255.255.192
+!
+interface Vlan10
+ description lab
+ ip address 172.16.30.1 255.255.255.0
+ ip access-group Vlan10_in in
+ ip helper-address 10.10.10.21
+!
+interface Vlan20
+ description guru
+ ip address 172.20.30.1 255.255.255.0
+ ip helper-address 10.10.10.21
+!
+router ospf 1
+ router-id 33.33.33.33
+ network 10.10.10.20 0.0.0.3 area 0
+ network 172.16.30.0 0.0.0.255 area 0
+ network 172.20.30.0 0.0.0.255 area 0
+ network 192.168.10.128 0.0.0.63 area 0
+!
+!
+no ip http server
+!
+!
+!
+ip access-list extended Vlan10_in
+ deny   ip 172.16.30.0 0.0.0.255 host 192.168.30.10
+ deny   ip 172.16.30.0 0.0.0.255 host 192.168.30.5
+ permit ip any any
+!
+!
+!
+control-plane
+!
+!
+line con 0
+ exec-timeout 0 0
+ privilege level 15
+ logging synchronous
+line aux 0
+ exec-timeout 0 0
+ privilege level 15
+ logging synchronous
+line vty 0 4
+ logging synchronous
+ login local
+ transport input ssh
+!
+end
