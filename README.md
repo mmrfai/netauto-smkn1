@@ -8,7 +8,6 @@
 | imbuhan | penjelasan   |
 | ------------ | ------------ |
 | `--limit`  |   untuk menjalankan pada perangkat tertentu (panggil berdasarkan inventory) |
-| `--diff`  |  untuk menunjukkan perbedaan dari sebelum dan sesudah |
 |  `-v  `  |  verbose, untuk debugging |
 |  `--tags `  |  menjalankan yang ada tags tersebut saja |
 | `--skip-tags `|  : menjalankan yang tidak ada tags tersebut |
